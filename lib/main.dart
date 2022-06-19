@@ -14,6 +14,7 @@ final items = List<String>.generate(10000, (i) => '$i');
       theme: ThemeData(
         primaryColor: Colors.white,
         appBarTheme: const AppBarTheme(color: Colors.white,),
+        primaryIconTheme: const IconThemeData(color: Colors.blue),
       ),
       home:  Scaffold(
         appBar: AppBar(
@@ -101,7 +102,7 @@ final items = List<String>.generate(10000, (i) => '$i');
                       onLongPress: () async{
                           await Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => VideoDataPage()
+                            MaterialPageRoute(builder: (context) => DemoApp()
                             ),
                           );
                       },
