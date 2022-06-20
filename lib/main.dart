@@ -102,7 +102,7 @@ final items = List<String>.generate(10000, (i) => '$i');
                       onLongPress: () async{
                           await Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DemoApp()
+                            MaterialPageRoute(builder: (context) => VideoDatailPage()
                             ),
                           );
                       },

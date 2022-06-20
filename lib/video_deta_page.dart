@@ -1,85 +1,95 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_api/youtube_api.dart';
 
-class DemoApp extends StatefulWidget {
-  @override
-  _DemoAppState createState() => _DemoAppState();
-}
-
-class _DemoAppState extends State<DemoApp> {
-  static String key = "YOUR_API_KEY";
-
-  YoutubeAPI youtube = YoutubeAPI(key);
-  List<YouTubeVideo> videoResult = [];
-
-  Future<void> callAPI() async {
-    String query = "Flutter GraphQL";
-    videoResult = await youtube.search(
-      query,
-      order: 'relevance',
-      videoDuration: 'any',
-    );
-    videoResult = await youtube.nextPage();
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    callAPI();
-    print('hello');
-  }
-
+class VideoDatailPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.blue[100],
-      appBar: AppBar(
-        title: Text('Youtube API'),
-      ),
-      body: ListView(
-        children: videoResult.map<Widget>(listItem).toList(),
-      ),
-    );
-  }
+    final items = List<String>.generate(10000, (i) => '$i');
 
-  Widget listItem(YouTubeVideo video) {
-    return Card(
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 7.0),
-        padding: EdgeInsets.all(12.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.blue),
+      ),
+      body: Container(
+        child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Image.network(
-                video.thumbnail.small.url ?? '',
-                width: 120.0,
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  SizedBox(
+                    child: Image.asset(
+                      'images/pekorart_1.jpeg',
+                      width: 100,
+                      height: 100,
+                      fit: BoxFit.fitHeight,
+                    ),
+                  ),
+                  const SizedBox(width: 8,),
+                  Column(
+                    children: <Widget>[
+                      const Text(
+                        'PekoTube',
+                        style: TextStyle(color: Colors.blue,),
+                      ),
+                      TextButton(
+                        child: Row(
+                          children: const <Widget>[
+                            Icon(Icons.notifications,
+                              color: Colors.red,),
+                            Text('登録する'),
+                          ],
+                        ),
+                        onPressed: () {
+                          //todo　押下された時の挙動がここ。
+                        },
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    video.title,
-                    softWrap: true,
-                    style: TextStyle(fontSize: 18.0),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 3.0),
-                    child: Text(
-                      video.channelTitle,
-                      softWrap: true,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+              child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onLongPress: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                            VideoDatailPage()
+                        ),
+                      );
+                    },
+                    contentPadding: const EdgeInsets.all(8),
+                    leading: Image.asset(
+                      'images/pekorart_1.jpeg',
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.fitHeight,
                     ),
-                  ),
-                  Text(
-                    video.url,
-                    softWrap: true,
-                  ),
-                ],
+                    title: Column(
+                      children: [
+                        Text(
+                          '【ホロライブ切り抜き】ぺこすば大戦争' + items[index] + '話',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Row(
+                          children: <Widget>[
+                            const Text(
+                              '100回再生',
+                              style: TextStyle(fontSize: 13),),
+                            Text(items[index] + '日前'),
+                          ],
+                        )
+                      ],
+                    ),
+                    trailing: const Icon(Icons.more_vert),
+                  );
+                },
               ),
             )
           ],
