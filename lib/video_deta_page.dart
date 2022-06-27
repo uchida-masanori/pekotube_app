@@ -1,100 +1,52 @@
 import 'package:flutter/material.dart';
-
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 class VideoDatailPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
-    final items = List<String>.generate(10000, (i) => '$i');
+    //(1) コントローラーの初期化
+    var ytcl = YoutubePlayerController(
+      initialVideoId: "1qFGauSSfB8&t",
+    );
 
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.blue),
-      ),
-      body: Container(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  SizedBox(
-                    child: Image.asset(
-                      'images/pekorart_1.jpeg',
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                  const SizedBox(width: 8,),
-                  Column(
-                    children: <Widget>[
-                      const Text(
-                        'PekoTube',
-                        style: TextStyle(color: Colors.blue,),
-                      ),
-                      TextButton(
-                        child: Row(
-                          children: const <Widget>[
-                            Icon(Icons.notifications,
-                              color: Colors.red,),
-                            Text('登録する'),
-                          ],
-                        ),
-                        onPressed: () {
-                          //todo　押下された時の挙動がここ。
-                        },
-                      )
-                    ],
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    onLongPress: () async {
-                      await Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>
-                            VideoDatailPage()
-                        ),
-                      );
-                    },
-                    contentPadding: const EdgeInsets.all(8),
-                    leading: Image.asset(
-                      'images/pekorart_1.jpeg',
-                      width: 50,
-                      height: 50,
-                      fit: BoxFit.fitHeight,
-                    ),
-                    title: Column(
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        //(2) YoutubePlayerControllerProviderでくるみます
+        home: YoutubePlayerControllerProvider(
+            controller: ytcl,
+            child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: Colors.white,
+                  iconTheme: const IconThemeData(color: Colors.blue),
+                  title: const Text("Youtube Player"),
+                ),
+                body: Container(
+                    padding: const EdgeInsets.all(30),
+                    child: Column(
                       children: [
-                        Text(
-                          '【ホロライブ切り抜き】ぺこすば大戦争' + items[index] + '話',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        //(3) プレーヤーiframeで再生枠を作ります
+                        const YoutubePlayerIFrame(),
+                        const Padding(padding: EdgeInsets.all(30)),
                         Row(
-                          children: <Widget>[
-                            const Text(
-                              '100回再生',
-                              style: TextStyle(fontSize: 13),),
-                            Text(items[index] + '日前'),
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            ElevatedButton(
+                                onPressed: () {
+                                  //(4) コントローラーのメソッドで操作
+                                  ytcl.play();
+                                },
+                                child: const Text("play")),
+                            ElevatedButton(
+                                onPressed: () {
+                                  ytcl.pause();
+                                },
+                                child: const Text("pause")),
                           ],
                         )
                       ],
-                    ),
-                    trailing: const Icon(Icons.more_vert),
-                  );
-                },
-              ),
+                    )
+                )
             )
-          ],
-        ),
-      ),
+        )
     );
   }
 }
