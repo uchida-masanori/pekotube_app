@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pekotube_app/video_deta_page.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,13 +10,21 @@ final items = List<String>.generate(10000, (i) => '$i');
 
   @override
   Widget build(BuildContext context) {
+
+    var ytcl = YoutubePlayerController(
+      initialVideoId: "1qFGauSSfB8&t",
+    );
+
     return MaterialApp(
       theme: ThemeData(
         primaryColor: Colors.white,
         appBarTheme: const AppBarTheme(color: Colors.white,),
         primaryIconTheme: const IconThemeData(color: Colors.blue),
       ),
-      home:  Scaffold(
+      debugShowCheckedModeBanner: false,
+      home: YoutubePlayerControllerProvider(
+        controller: ytcl,
+        child:Scaffold(
         appBar: AppBar(
           centerTitle: false,
           leading: const Icon(
@@ -73,15 +81,15 @@ final items = List<String>.generate(10000, (i) => '$i');
                     Column(
                       children: <Widget>[
                          const Text(
-                          'PekoTube',
+                          'ぺこちゅーぶ！',
                           style: TextStyle(color: Colors.blue,),
                         ),
                         TextButton(
                           child: Row(
                             children: const <Widget>[
-                              Icon(Icons.notifications,
+                              Icon(Icons.refresh,
                               color: Colors.red,),
-                              Text('登録する'),
+                              Text('更新するぺこな'),
                             ],
                           ),
                           onPressed: ()
@@ -96,50 +104,29 @@ final items = List<String>.generate(10000, (i) => '$i');
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      onLongPress: () async{
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => VideoDatailPage()
-                            ),
-                          );
-                      },
                       contentPadding: const EdgeInsets.all(8),
-                      leading:Image.asset(
-                        'images/pekorart_1.jpeg',
-                        width: 50,
-                        height: 50,
-                        fit: BoxFit.fitHeight,
-                      ),
                       title: Column(
                         children: [
-                          Text(
-                            '【ホロライブ切り抜き】ぺこすば大戦争' + items[index] + '話',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
+                          // iframe playerの再生画面枠組
+                          const YoutubePlayerIFrame(),
+                          const Padding(padding: EdgeInsets.all(8)),
                           Row(
-                            children: <Widget>[
-                              const Text(
-                                  '100回再生',
-                              style: TextStyle(fontSize: 13),),
-                              Text(items[index] +'日前'),
-                            ],
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                           )
                         ],
                       ),
-                      trailing: const Icon(Icons.more_vert),
                     );
                   },
+                  itemCount: 10,
                 ),
-              )
+              ),
             ],
           ),
         ),
       ),
+      )
     );
   }
 }
