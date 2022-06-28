@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
-class video_data_page extends StatelessWidget{
+class VideoDatailPage extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     //(1) コントローラーの初期化
