@@ -11,8 +11,13 @@ final items = List<String>.generate(10000, (i) => '$i');
   @override
   Widget build(BuildContext context) {
 
-    var ytcl = YoutubePlayerController(
+    final ytcl = YoutubePlayerController(
       initialVideoId: "1qFGauSSfB8&t",
+      params: const YoutubePlayerParams(
+        playlist: ['nPt8bK2gbaU', 'gQDByCdjUXw'],
+        showControls: true,
+        showFullscreenButton: true,
+      ),
     );
 
     return MaterialApp(
@@ -108,18 +113,15 @@ final items = List<String>.generate(10000, (i) => '$i');
                     return ListTile(
                       contentPadding: const EdgeInsets.all(8),
                       title: Column(
-                        children: [
+                        children: const [
                           // iframe playerの再生画面枠組
-                          const YoutubePlayerIFrame(),
-                          const Padding(padding: EdgeInsets.all(8)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          )
+                          YoutubePlayerIFrame(),
+                          Padding(padding: EdgeInsets.all(0)),
                         ],
                       ),
                     );
                   },
-                  itemCount: 10,
+                  itemCount: 3,
                 ),
               ),
             ],
